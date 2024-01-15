@@ -14,7 +14,7 @@ public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
         RuleFor(v => v.PhoneNumber)
             .NotEmpty()
             .MustAsync(BeUniquePhoneNumber)
-                .WithMessage("'{PropertyName}'已注册！")
+                .WithMessage("手机号码已注册！")
                 .WithErrorCode("Unique")
             .Must(BeFormatPhoneNumber)
                 .WithMessage("手机号码格式不正确！")
