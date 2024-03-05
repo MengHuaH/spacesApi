@@ -12,7 +12,7 @@ public class User : EndpointGroupBase
     public override void Map(WebApplication app)
     {
         app.MapGroup(this)
-            .RequireAuthorization()
+            //.RequireAuthorization()
             .MapGet(GetUser,"{PhoneNumber}")
             .MapPost(CreateUser)
             .MapPut(UpdateUser, "{PhoneNumber}")
@@ -21,7 +21,9 @@ public class User : EndpointGroupBase
 
     public async Task<Domain.Entities.Users> GetUser(ISender sender, [AsParameters] GetUserQuery query)
     {
-        return await sender.Send(query);
+        Domain.Entities.Users users = new Domain.Entities.Users();
+        users = await sender.Send(query);
+        return users;
     }
 
     public async Task<long> CreateUser(ISender sender, CreateUserCommand command)

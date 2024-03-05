@@ -1,5 +1,7 @@
 using spacesApi.Infrastructure.Data;
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,6 +10,17 @@ builder.Services.AddKeyVaultIfConfigured(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebServices();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins().AllowAnyOrigin()
+                                              .AllowAnyHeader()
+                                              .AllowAnyMethod();
+                      });
+});
 
 var app = builder.Build();
 
@@ -25,7 +38,9 @@ else
 app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseRouting();
+app.UseCors(MyAllowSpecificOrigins);
+app.UseAuthentication();
 app.UseSwaggerUi3(settings =>
 {
     settings.Path = "/api";
@@ -35,6 +50,8 @@ app.UseSwaggerUi3(settings =>
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
+
+
 
 app.MapRazorPages();
 

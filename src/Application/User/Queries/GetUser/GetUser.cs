@@ -23,7 +23,9 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery,Users>
 
     public async Task<Users> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
-        return await _context.User
+        Users users = new Users();
+        users = await _context.User
             .SingleAsync(b => b.PhoneNumber == request.PhoneNumber);
+        return users;
     }
 }
