@@ -38,13 +38,11 @@ else
 app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseRouting();
-app.UseCors(MyAllowSpecificOrigins);
-app.UseAuthentication();
+
 app.UseSwaggerUi3(settings =>
 {
     settings.Path = "/api";
-    settings.DocumentPath = "/api/specification.json";
+    settings.DocumentPath = "api/specification.json";
 });
 
 app.MapControllerRoute(
@@ -62,6 +60,9 @@ app.UseExceptionHandler(options => { });
 app.Map("/", () => Results.Redirect("/api"));
 
 app.MapEndpoints();
+app.UseRouting();
+app.UseCors(MyAllowSpecificOrigins);
+app.UseAuthentication();
 
 app.Run();
 

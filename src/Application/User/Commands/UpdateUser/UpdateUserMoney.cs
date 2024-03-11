@@ -4,7 +4,7 @@ namespace spacesApi.Application.User.Commands.UpdateUserMoney;
 
 public record UpdateUserMoneyCommand : IRequest
 {
-    public long PhoneNumber { get; init; }
+    public int Id { get; init; }
     public int Money { get; init; }
 
 }
@@ -21,9 +21,7 @@ public class UpdateUserMoneyCommandHandler : IRequestHandler<UpdateUserMoneyComm
     public async Task Handle(UpdateUserMoneyCommand request, CancellationToken cancellationToken)
     {
         var entity = await _context.User
-            .FindAsync(new object[] { request.PhoneNumber }, cancellationToken);
-
-        Guard.Against.NotFound(request.PhoneNumber, entity);
+            .SingleAsync(b => b.Id == request.Id, cancellationToken);
 
         entity.Money = request.Money;
 

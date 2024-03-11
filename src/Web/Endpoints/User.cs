@@ -1,9 +1,11 @@
 ﻿using spacesApi.Application.Common.Models;
+using spacesApi.Application.TodoItems.Queries.GetTodoItemsWithPagination;
 using spacesApi.Application.User.Commands.CreateUser;
 using spacesApi.Application.User.Commands.DeleteUser;
 using spacesApi.Application.User.Commands.UpdateUser;
 using spacesApi.Application.User.Commands.UpdateUserMoney;
 using spacesApi.Application.User.Queries.GetUser;
+using spacesApi.Application.User.Queries.GetUsersWithPagination;
 
 namespace spacesApi.Web.Endpoints;
 
@@ -13,10 +15,17 @@ public class User : EndpointGroupBase
     {
         app.MapGroup(this)
             //.RequireAuthorization()
-            .MapGet(GetUser,"{PhoneNumber}")
+            .MapGet(GetUserList)
+            .MapGet(GetUser, "{PhoneNumber}")
             .MapPost(CreateUser)
-            .MapPut(UpdateUser, "{PhoneNumber}")
+            .MapPut(UpdateUser)
+            .MapPut(UpdateMoney,"updatemoney")
             .MapDelete(DeleteUser, "{id}");
+    }
+
+    public async Task<PaginatedList<Domain.Entities.Users>> GetUserList(ISender sender, [AsParameters] GetUsersWithPagination query)
+    {
+        return await sender.Send(query);
     }
 
     public async Task<Domain.Entities.Users> GetUser(ISender sender, [AsParameters] GetUserQuery query)
@@ -31,13 +40,16 @@ public class User : EndpointGroupBase
         return await sender.Send(command);
     }
 
-    public async Task<IResult> UpdateUser(ISender sender, int id, UpdateUserCommand command)
+    public async Task<IResult> UpdateUser(ISender sender, UpdateUserCommand command)
     {
-        if (id != command.Id) return Results.BadRequest();
         await sender.Send(command);
         return Results.NoContent();
     }
-
+    public async Task<IResult> UpdateMoney(ISender sender, UpdateUserMoneyCommand command)
+    {
+        await sender.Send(command);
+        return Results.NoContent();
+    }
 
     public async Task<IResult> DeleteUser(ISender sender, int id)
     {
