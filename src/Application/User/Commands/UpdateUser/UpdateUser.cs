@@ -6,6 +6,7 @@ public record UpdateUserCommand : IRequest
 {
     public int Id { get; init; }
 
+    public string Name { get; init; } = null!;
     public long PhoneNumber { get; init; }
 
 }
@@ -27,6 +28,7 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
         Guard.Against.NotFound(request.Id, entity);
 
         entity.PhoneNumber = request.PhoneNumber;
+        entity.Name = request.Name;
 
         await _context.SaveChangesAsync(cancellationToken);
 

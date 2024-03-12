@@ -9,11 +9,11 @@ using spacesApi.Infrastructure.Data;
 
 #nullable disable
 
-namespace spacesApi.Infrastructure.Data.Migrations
+namespace spacesApi.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240109185447_000")]
-    partial class _000
+    [Migration("20240312192045_2")]
+    partial class _2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -175,20 +175,22 @@ namespace spacesApi.Infrastructure.Data.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RoomId")
+                    b.Property<int>("RoomId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartingTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoomId");
+                    b.HasIndex("RoomId")
+                        .IsUnique();
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("OrderGoods");
                 });
@@ -201,10 +203,22 @@ namespace spacesApi.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Money")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("PersonnelSituation")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PowerSupply")
+                        .HasColumnType("int");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -298,6 +312,10 @@ namespace spacesApi.Infrastructure.Data.Migrations
 
                     b.Property<int>("Money")
                         .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("PhoneNumber")
                         .HasColumnType("bigint");
@@ -426,12 +444,16 @@ namespace spacesApi.Infrastructure.Data.Migrations
             modelBuilder.Entity("spacesApi.Domain.Entities.OrderGoods", b =>
                 {
                     b.HasOne("spacesApi.Domain.Entities.Room", "Room")
-                        .WithMany()
-                        .HasForeignKey("RoomId");
+                        .WithOne("OrderGoods")
+                        .HasForeignKey("spacesApi.Domain.Entities.OrderGoods", "RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("spacesApi.Domain.Entities.Users", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                        .WithOne("OrderGoods")
+                        .HasForeignKey("spacesApi.Domain.Entities.OrderGoods", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Room");
 
@@ -472,9 +494,19 @@ namespace spacesApi.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("spacesApi.Domain.Entities.Room", b =>
+                {
+                    b.Navigation("OrderGoods");
+                });
+
             modelBuilder.Entity("spacesApi.Domain.Entities.TodoList", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("spacesApi.Domain.Entities.Users", b =>
+                {
+                    b.Navigation("OrderGoods");
                 });
 #pragma warning restore 612, 618
         }

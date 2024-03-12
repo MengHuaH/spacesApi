@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using spacesApi.Infrastructure.Data;
 
 #nullable disable
 
-namespace spacesApi.Infrastructure.Data.Migrations
+namespace spacesApi.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240312192533_3")]
+    partial class _3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,13 +175,13 @@ namespace spacesApi.Infrastructure.Data.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RoomId")
+                    b.Property<int>("RoomId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartingTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -198,10 +201,22 @@ namespace spacesApi.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Money")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("PersonnelSituation")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PowerSupply")
+                        .HasColumnType("int");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -296,12 +311,16 @@ namespace spacesApi.Infrastructure.Data.Migrations
                     b.Property<int>("Money")
                         .HasColumnType("int");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<long>("PhoneNumber")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("spacesApi.Infrastructure.Identity.ApplicationUser", b =>
@@ -423,12 +442,16 @@ namespace spacesApi.Infrastructure.Data.Migrations
             modelBuilder.Entity("spacesApi.Domain.Entities.OrderGoods", b =>
                 {
                     b.HasOne("spacesApi.Domain.Entities.Room", "Room")
-                        .WithMany()
-                        .HasForeignKey("RoomId");
+                        .WithMany("OrderGoods")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("spacesApi.Domain.Entities.Users", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                        .WithMany("OrderGoods")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Room");
 
@@ -469,9 +492,19 @@ namespace spacesApi.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("spacesApi.Domain.Entities.Room", b =>
+                {
+                    b.Navigation("OrderGoods");
+                });
+
             modelBuilder.Entity("spacesApi.Domain.Entities.TodoList", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("spacesApi.Domain.Entities.Users", b =>
+                {
+                    b.Navigation("OrderGoods");
                 });
 #pragma warning restore 612, 618
         }

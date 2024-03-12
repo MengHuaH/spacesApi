@@ -6,6 +6,135 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/Room": {
+      "get": {
+        "tags": [
+          "Room"
+        ],
+        "operationId": "GetRoomWithPagination",
+        "parameters": [
+          {
+            "name": "RoomName",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 3
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedListOfRoom"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Room"
+        ],
+        "operationId": "CreateRoom",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoomCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Room"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Room"
+        ],
+        "operationId": "UpdateRoom",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRoomCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Room/{id}": {
+      "delete": {
+        "tags": [
+          "Room"
+        ],
+        "operationId": "DeleteRoom",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/TodoItems": {
       "get": {
         "tags": [
@@ -930,6 +1059,222 @@
   },
   "components": {
     "schemas": {
+      "PaginatedListOfRoom": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Room"
+            }
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasPreviousPage": {
+            "type": "boolean"
+          },
+          "hasNextPage": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Room": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "money": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "state": {
+            "$ref": "#/components/schemas/RoomState"
+          },
+          "personnelSituation": {
+            "$ref": "#/components/schemas/RoomPersonnelSituation"
+          },
+          "powerSupply": {
+            "$ref": "#/components/schemas/RoomPowerSupply"
+          },
+          "orderGoods": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/OrderGoods"
+            }
+          }
+        }
+      },
+      "RoomState": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "open",
+          "closed"
+        ],
+        "enum": [
+          0,
+          1
+        ]
+      },
+      "RoomPersonnelSituation": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "have",
+          "not"
+        ],
+        "enum": [
+          0,
+          1
+        ]
+      },
+      "RoomPowerSupply": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "open",
+          "closed"
+        ],
+        "enum": [
+          0,
+          1
+        ]
+      },
+      "OrderGoods": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "orderId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "roomId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "room": {
+            "$ref": "#/components/schemas/Room"
+          },
+          "user": {
+            "$ref": "#/components/schemas/Users"
+          },
+          "startingTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Users": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "money": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "orderGoods": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/OrderGoods"
+            }
+          }
+        }
+      },
+      "CreateRoomCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "money": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "state": {
+            "$ref": "#/components/schemas/RoomState"
+          },
+          "personnelSituation": {
+            "$ref": "#/components/schemas/RoomPersonnelSituation"
+          },
+          "powerSupply": {
+            "$ref": "#/components/schemas/RoomPowerSupply"
+          }
+        }
+      },
+      "UpdateRoomCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "money": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "state": {
+            "$ref": "#/components/schemas/RoomState"
+          },
+          "personnelSituation": {
+            "$ref": "#/components/schemas/RoomPersonnelSituation"
+          },
+          "powerSupply": {
+            "$ref": "#/components/schemas/RoomPowerSupply"
+          }
+        }
+      },
       "PaginatedListOfTodoItemBriefDto": {
         "type": "object",
         "additionalProperties": false,
@@ -1188,24 +1533,6 @@
           }
         }
       },
-      "Users": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "phoneNumber": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "money": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
       "CreateUserCommand": {
         "type": "object",
         "additionalProperties": false,
@@ -1213,6 +1540,9 @@
           "phoneNumber": {
             "type": "integer",
             "format": "int64"
+          },
+          "userName": {
+            "type": "string"
           },
           "money": {
             "type": "integer",
@@ -1227,6 +1557,9 @@
           "id": {
             "type": "integer",
             "format": "int32"
+          },
+          "name": {
+            "type": "string"
           },
           "phoneNumber": {
             "type": "integer",

@@ -1,5 +1,4 @@
 ﻿using spacesApi.Application.Common.Models;
-using spacesApi.Application.TodoItems.Queries.GetTodoItemsWithPagination;
 using spacesApi.Application.User.Commands.CreateUser;
 using spacesApi.Application.User.Commands.DeleteUser;
 using spacesApi.Application.User.Commands.UpdateUser;

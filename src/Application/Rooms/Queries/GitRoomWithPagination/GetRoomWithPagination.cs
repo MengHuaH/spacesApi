@@ -7,7 +7,7 @@ namespace spacesApi.Application.Rooms.Queries.GetRoomWithPagination;
 
 public record GetRoomWithPaginationQuery : IRequest<PaginatedList<Room>>
 {
-    public int Id { get; init; }
+    public string? RoomName { get; init; }
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 }
@@ -26,9 +26,8 @@ public class GetRoomWithPaginationQueryHandler : IRequestHandler<GetRoomWithPagi
     public async Task<PaginatedList<Room>> Handle(GetRoomWithPaginationQuery request, CancellationToken cancellationToken)
     {
         return await _context.Room
-            .Where(x => x.Id == request.Id)
+            .Where(x => String.IsNullOrEmpty(request.RoomName) ? x.Name != request.RoomName : x.Name == request.RoomName)
             .OrderBy(x => x.Id)
-            .ProjectTo<Room>(_mapper.ConfigurationProvider)
-            .PaginatedListAsync(request.PageNumber, request.PageSize);
+            .PaginatedListAsync(request.PageNumber, request.PageSize); ;
     }
 }

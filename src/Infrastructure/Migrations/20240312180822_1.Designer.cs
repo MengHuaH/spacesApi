@@ -9,11 +9,11 @@ using spacesApi.Infrastructure.Data;
 
 #nullable disable
 
-namespace spacesApi.Infrastructure.Data.Migrations
+namespace spacesApi.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240102102314_createUsertableRoomtableOrdertable")]
-    partial class createUsertableRoomtableOrdertable
+    [Migration("20240312180822_1")]
+    partial class _1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,6 +158,61 @@ namespace spacesApi.Infrastructure.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("spacesApi.Domain.Entities.OrderGoods", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoomId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartingTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("OrderGoods");
+                });
+
+            modelBuilder.Entity("spacesApi.Domain.Entities.Room", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Room");
+                });
+
             modelBuilder.Entity("spacesApi.Domain.Entities.TodoItem", b =>
                 {
                     b.Property<int>("Id")
@@ -233,6 +288,25 @@ namespace spacesApi.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TodoLists");
+                });
+
+            modelBuilder.Entity("spacesApi.Domain.Entities.Users", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Money")
+                        .HasColumnType("int");
+
+                    b.Property<long>("PhoneNumber")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("spacesApi.Infrastructure.Identity.ApplicationUser", b =>
@@ -351,6 +425,25 @@ namespace spacesApi.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("spacesApi.Domain.Entities.OrderGoods", b =>
+                {
+                    b.HasOne("spacesApi.Domain.Entities.Room", "Room")
+                        .WithOne("OrderGoods")
+                        .HasForeignKey("spacesApi.Domain.Entities.OrderGoods", "RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("spacesApi.Domain.Entities.Users", "User")
+                        .WithOne("OrderGoods")
+                        .HasForeignKey("spacesApi.Domain.Entities.OrderGoods", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("spacesApi.Domain.Entities.TodoItem", b =>
                 {
                     b.HasOne("spacesApi.Domain.Entities.TodoList", "List")
@@ -385,9 +478,19 @@ namespace spacesApi.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("spacesApi.Domain.Entities.Room", b =>
+                {
+                    b.Navigation("OrderGoods");
+                });
+
             modelBuilder.Entity("spacesApi.Domain.Entities.TodoList", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("spacesApi.Domain.Entities.Users", b =>
+                {
+                    b.Navigation("OrderGoods");
                 });
 #pragma warning restore 612, 618
         }

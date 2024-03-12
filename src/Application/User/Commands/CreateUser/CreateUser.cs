@@ -5,6 +5,7 @@ namespace spacesApi.Application.User.Commands.CreateUser;
 public record CreateUserCommand : IRequest<long>
 {
     public long PhoneNumber { get; init; }
+    public string UserName { get; init; } = null!;
 
     public int Money { get; init; } = 0;
 }
@@ -25,6 +26,8 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, long>
         entity.PhoneNumber = request.PhoneNumber;
 
         entity.Money = request.Money;
+        
+        entity.Name = request.UserName;
 
         _context.User.Add(entity);
 
