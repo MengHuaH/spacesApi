@@ -1261,6 +1261,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "clientId": {
+            "type": "string",
+            "nullable": true
+          },
           "state": {
             "$ref": "#/components/schemas/RoomState"
           },
@@ -1283,20 +1287,22 @@
         "type": "integer",
         "description": "",
         "x-enumNames": [
-          "open",
-          "closed"
+          "closed",
+          "appointment",
+          "open"
         ],
         "enum": [
           0,
-          1
+          1,
+          2
         ]
       },
       "RoomPersonnelSituation": {
         "type": "integer",
         "description": "",
         "x-enumNames": [
-          "have",
-          "not"
+          "not",
+          "have"
         ],
         "enum": [
           0,
@@ -1307,8 +1313,8 @@
         "type": "integer",
         "description": "",
         "x-enumNames": [
-          "open",
-          "closed"
+          "closed",
+          "open"
         ],
         "enum": [
           0,
@@ -1448,6 +1454,9 @@
             "type": "integer",
             "format": "int32"
           },
+          "clientId": {
+            "type": "string"
+          },
           "state": {
             "$ref": "#/components/schemas/RoomState"
           },
@@ -1473,6 +1482,9 @@
           "money": {
             "type": "integer",
             "format": "int32"
+          },
+          "clientId": {
+            "type": "string"
           },
           "state": {
             "$ref": "#/components/schemas/RoomState"

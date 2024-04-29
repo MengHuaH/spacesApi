@@ -7,6 +7,7 @@ public record CreateRoomCommand : IRequest<Room>
 {
     public string Name { get; init; } = null!;
     public int Money { get; init; } = 0!;
+    public string ClientId { get; init; } = null!;
     public RoomState State { get; init; } = RoomState.closed;
     public RoomPersonnelSituation PersonnelSituation { get; init; } = RoomPersonnelSituation.not;
     public RoomPowerSupply PowerSupply { get; init; } = RoomPowerSupply.closed;
@@ -28,6 +29,8 @@ public class CreateRoomCommandHandler : IRequestHandler<CreateRoomCommand, Room>
         entity.Name = request.Name;
 
         entity.Money = request.Money;
+
+        entity.ClientId = request.ClientId;
 
         entity.State = request.State;
 

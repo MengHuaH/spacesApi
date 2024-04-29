@@ -7,18 +7,19 @@ using System.Threading.Tasks;
 namespace spacesApi.Domain.Enums;
 public enum RoomState
 {
-    open = 0, 
-    closed = 1,
+    closed = 0,
+    appointment = 1,
+    open = 2,
 }
 
 public enum RoomPersonnelSituation
 {
-    have = 0,
-    not = 1,
+    not = 0,
+    have = 1,
 }
 
 public enum RoomPowerSupply
 {
-    open = 0,
-    closed = 1,
+    closed = 0,
+    open = 1,
 }
