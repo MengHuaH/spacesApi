@@ -90,8 +90,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "integer",
-                  "format": "int32"
+                  "$ref": "#/components/schemas/OrderGoodsDto"
                 }
               }
             }
@@ -1341,6 +1340,13 @@
             "type": "integer",
             "format": "int32"
           },
+          "duration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "orderStatus": {
+            "$ref": "#/components/schemas/OrderGoodsState"
+          },
           "room": {
             "$ref": "#/components/schemas/Room"
           },
@@ -1360,6 +1366,22 @@
             "format": "date-time"
           }
         }
+      },
+      "OrderGoodsState": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "finish",
+          "start",
+          "notStarted",
+          "cancel"
+        ],
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ]
       },
       "Users": {
         "type": "object",
@@ -1389,6 +1411,20 @@
           }
         }
       },
+      "OrderGoodsDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "state": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "CreateOrderGoodsCommand": {
         "type": "object",
         "additionalProperties": false,
@@ -1398,6 +1434,10 @@
           },
           "user": {
             "$ref": "#/components/schemas/Users"
+          },
+          "duration": {
+            "type": "integer",
+            "format": "int32"
           },
           "startingTime": {
             "type": "string",

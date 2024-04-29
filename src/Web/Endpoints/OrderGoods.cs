@@ -23,7 +23,7 @@ public class OrderGoods : EndpointGroupBase
         return await sender.Send(query);
     }
 
-    public async Task<int> CreateOrderGoods(ISender sender, CreateOrderGoodsCommand command)
+    public async Task<OrderGoodsDto> CreateOrderGoods(ISender sender, CreateOrderGoodsCommand command)
     {
         return await sender.Send(command);
     }
