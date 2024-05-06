@@ -2,7 +2,7 @@
 public class OrderGoods
 {
     public int Id { get; set; }
-    public int OrderId { get; set; } = 0;
+    public string? OrderId { get; set; }
     public int RoomId { get; set; }
     public int UserId { get; set; }
     public int Duration { get; set; } = 120;

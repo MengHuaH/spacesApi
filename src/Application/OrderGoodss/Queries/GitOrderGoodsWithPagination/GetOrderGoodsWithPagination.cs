@@ -27,10 +27,11 @@ public class GetOrderGoodsWithPaginationQueryHandler : IRequestHandler<GetOrderG
 
     public async Task<PaginatedList<OrderGoodsListDto>> Handle(GetOrderGoodsWithPaginationQuery request, CancellationToken cancellationToken)
     {
-        return await _context.OrderGoods
+        var a = await _context.OrderGoods
                .Where(x => x.Room.Id == request.RoomId || x.User.PhoneNumber == request.PhoneNumber)
-               .OrderBy(x => x.Id)
+               .OrderByDescending(x => x.StartingTime)
                .ProjectTo<OrderGoodsListDto>(_mapper.ConfigurationProvider)
-               .PaginatedListAsync(request.PageNumber, request.PageSize); 
+               .PaginatedListAsync(request.PageNumber, request.PageSize);
+        return a;
     }
 }
