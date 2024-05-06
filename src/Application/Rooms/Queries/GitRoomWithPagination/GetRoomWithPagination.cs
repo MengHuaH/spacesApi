@@ -1,18 +1,22 @@
-﻿using spacesApi.Application.Common.Interfaces;
+﻿using System.Xml.Linq;
+using spacesApi.Application.Common.Interfaces;
 using spacesApi.Application.Common.Mappings;
 using spacesApi.Application.Common.Models;
+using spacesApi.Application.Rooms.Queries.GetRoomListQuery;
+using spacesApi.Application.Rooms.Queries.GetRoomWithPaginationQuery;
 using spacesApi.Domain.Entities;
+using spacesApi.Domain.Enums;
 
 namespace spacesApi.Application.Rooms.Queries.GetRoomWithPagination;
 
-public record GetRoomWithPaginationQuery : IRequest<PaginatedList<Room>>
+public record GetRoomWithPaginationQuery : IRequest<PaginatedList<RoomWithPaginationDto>>
 {
     public string? RoomName { get; init; }
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 }
 
-public class GetRoomWithPaginationQueryHandler : IRequestHandler<GetRoomWithPaginationQuery, PaginatedList<Room>>
+public class GetRoomWithPaginationQueryHandler : IRequestHandler<GetRoomWithPaginationQuery, PaginatedList<RoomWithPaginationDto>>
 {
     private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
@@ -23,11 +27,14 @@ public class GetRoomWithPaginationQueryHandler : IRequestHandler<GetRoomWithPagi
         _mapper = mapper;
     }
 
-    public async Task<PaginatedList<Room>> Handle(GetRoomWithPaginationQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<RoomWithPaginationDto>> Handle(GetRoomWithPaginationQuery request, CancellationToken cancellationToken)
     {
-        return await _context.Room
+        DateTime dateTime = DateTime.Now;
+        var a = await _context.Room
             .Where(x => String.IsNullOrEmpty(request.RoomName) ? x.Name != request.RoomName : x.Name == request.RoomName)
             .OrderBy(x => x.Id)
-            .PaginatedListAsync(request.PageNumber, request.PageSize); ;
+            .ProjectTo<RoomWithPaginationDto>(_mapper.ConfigurationProvider)
+            .PaginatedListAsync(request.PageNumber, request.PageSize);
+        return a;
     }
 }

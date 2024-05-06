@@ -4,6 +4,7 @@ using spacesApi.Application.Rooms.Commands.CreateRoom;
 using spacesApi.Application.Rooms.Commands.DeleteRoom;
 using spacesApi.Application.Rooms.Commands.UpdateRoom;
 using spacesApi.Application.Rooms.Queries.GetRoomListQuery;
+using spacesApi.Application.Rooms.Queries.GetRoomWithPaginationQuery;
 
 
 namespace spacesApi.Web.Endpoints;
@@ -21,7 +22,7 @@ public class Room : EndpointGroupBase
             .MapDelete(DeleteRoom, "{id}");
     }
 
-    public async Task<PaginatedList<Domain.Entities.Room>> GetRoomWithPagination(ISender sender, [AsParameters] GetRoomWithPaginationQuery query)
+    public async Task<PaginatedList<RoomWithPaginationDto>> GetRoomWithPagination(ISender sender, [AsParameters] GetRoomWithPaginationQuery query)
     {
         return await sender.Send(query);
     }

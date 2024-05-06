@@ -8,8 +8,7 @@ namespace spacesApi.Application.OrderGoodss.Queries.GetOrderGoodsWithPagination;
 
 public record GetOrderGoodsWithPaginationQuery : IRequest<PaginatedList<OrderGoodsListDto>>
 {
-    public int? RoomId { get; init; }
-    public long? PhoneNumber { get; init; }
+    public string? OrderId { get; init; }
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 }
@@ -28,7 +27,7 @@ public class GetOrderGoodsWithPaginationQueryHandler : IRequestHandler<GetOrderG
     public async Task<PaginatedList<OrderGoodsListDto>> Handle(GetOrderGoodsWithPaginationQuery request, CancellationToken cancellationToken)
     {
         var a = await _context.OrderGoods
-               .Where(x => x.Room.Id == request.RoomId || x.User.PhoneNumber == request.PhoneNumber)
+               .Where(x => String.IsNullOrEmpty(request.OrderId) ? x.OrderId != request.OrderId : x.OrderId == request.OrderId)
                .OrderByDescending(x => x.StartingTime)
                .ProjectTo<OrderGoodsListDto>(_mapper.ConfigurationProvider)
                .PaginatedListAsync(request.PageNumber, request.PageSize);

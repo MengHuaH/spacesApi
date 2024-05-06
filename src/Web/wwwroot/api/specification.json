@@ -14,24 +14,13 @@
         "operationId": "GetOrderGoodsWithPagination",
         "parameters": [
           {
-            "name": "RoomId",
+            "name": "OrderId",
             "in": "query",
             "schema": {
-              "type": "integer",
-              "format": "int32",
+              "type": "string",
               "nullable": true
             },
             "x-position": 1
-          },
-          {
-            "name": "PhoneNumber",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int64",
-              "nullable": true
-            },
-            "x-position": 2
           },
           {
             "name": "PageNumber",
@@ -41,7 +30,7 @@
               "type": "integer",
               "format": "int32"
             },
-            "x-position": 3
+            "x-position": 2
           },
           {
             "name": "PageSize",
@@ -51,7 +40,7 @@
               "type": "integer",
               "format": "int32"
             },
-            "x-position": 4
+            "x-position": 3
           }
         ],
         "responses": {
@@ -256,7 +245,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaginatedListOfRoom"
+                  "$ref": "#/components/schemas/PaginatedListOfRoomWithPaginationDto"
                 }
               }
             }
@@ -1410,7 +1399,6 @@
           },
           "orderGoods": {
             "type": "array",
-            "nullable": true,
             "items": {
               "$ref": "#/components/schemas/OrderGoods"
             }
@@ -1699,14 +1687,14 @@
           }
         }
       },
-      "PaginatedListOfRoom": {
+      "PaginatedListOfRoomWithPaginationDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "items": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Room"
+              "$ref": "#/components/schemas/RoomWithPaginationDto"
             }
           },
           "pageNumber": {
@@ -1726,6 +1714,84 @@
           },
           "hasNextPage": {
             "type": "boolean"
+          }
+        }
+      },
+      "RoomWithPaginationDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "money": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "clientId": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "$ref": "#/components/schemas/RoomState"
+          },
+          "personnelSituation": {
+            "$ref": "#/components/schemas/RoomPersonnelSituation"
+          },
+          "powerSupply": {
+            "$ref": "#/components/schemas/RoomPowerSupply"
+          },
+          "orderGoods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderGoodsWithPaginationDto"
+            }
+          }
+        }
+      },
+      "OrderGoodsWithPaginationDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "orderId": {
+            "type": "string",
+            "nullable": true
+          },
+          "roomId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "duration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "orderStatus": {
+            "$ref": "#/components/schemas/OrderGoodsState"
+          },
+          "startingTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
