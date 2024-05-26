@@ -9,5 +9,5 @@ public class Room
     public RoomPersonnelSituation PersonnelSituation { get; set; } = RoomPersonnelSituation.not;//人员情况
     public RoomPowerSupply PowerSupply { get; set; } = RoomPowerSupply.closed;//电源
 
-    public ICollection<OrderGoods> OrderGoods { get; set; } = [];
+    public IList<OrderGoods> OrderGoods { get; set; } = [];
 }

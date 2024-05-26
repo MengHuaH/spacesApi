@@ -10,7 +10,7 @@
 
 export interface IOrderGoodsClient {
 
-    getOrderGoodsWithPagination(orderId: string | null | undefined, pageNumber: number, pageSize: number): Promise<PaginatedListOfOrderGoodsListDto>;
+    getOrderGoodsWithPagination(orderId: string | null | undefined, phoneNumber: number, pageNumber: number, pageSize: number): Promise<PaginatedListOfOrderGoodsListDto>;
 
     createOrderGoods(command: CreateOrderGoodsCommand): Promise<OrderGoodsDto>;
 
@@ -31,10 +31,14 @@ export class OrderGoodsClient implements IOrderGoodsClient {
         this.baseUrl = baseUrl ?? "https://172.27.110.74:5001";
     }
 
-    getOrderGoodsWithPagination(orderId: string | null | undefined, pageNumber: number, pageSize: number): Promise<PaginatedListOfOrderGoodsListDto> {
+    getOrderGoodsWithPagination(orderId: string | null | undefined, phoneNumber: number, pageNumber: number, pageSize: number): Promise<PaginatedListOfOrderGoodsListDto> {
         let url_ = this.baseUrl + "/api/OrderGoods?";
         if (orderId !== undefined && orderId !== null)
             url_ += "OrderId=" + encodeURIComponent("" + orderId) + "&";
+        if (phoneNumber === undefined || phoneNumber === null)
+            throw new Error("The parameter 'phoneNumber' must be defined and cannot be null.");
+        else
+            url_ += "PhoneNumber=" + encodeURIComponent("" + phoneNumber) + "&";
         if (pageNumber === undefined || pageNumber === null)
             throw new Error("The parameter 'pageNumber' must be defined and cannot be null.");
         else

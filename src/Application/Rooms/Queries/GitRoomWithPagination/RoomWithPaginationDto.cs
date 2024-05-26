@@ -8,7 +8,7 @@ public class RoomWithPaginationDto
 {
     public RoomWithPaginationDto()
     {
-        OrderGoods = [];
+        OrderGoods = Array.Empty<OrderGoodsWithPaginationDto>();
     }
 
     public int Id { get; set; }
@@ -19,7 +19,7 @@ public class RoomWithPaginationDto
     public RoomPersonnelSituation PersonnelSituation { get; set; }//人员情况
     public RoomPowerSupply PowerSupply { get; set; }//电源
 
-    public List<OrderGoodsWithPaginationDto> OrderGoods { get; init; }
+    public IReadOnlyCollection<OrderGoodsWithPaginationDto> OrderGoods { get; init; }
 
     private class Mapping : Profile
     {
